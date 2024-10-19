@@ -1,8 +1,8 @@
 // HashPage.js
 import React, { useState } from 'react';
 import { Box, Typography, TextField, Button, Select, MenuItem, FormControl, InputLabel, Divider, Grid2, IconButton } from '@mui/material';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy'; // Иконка для кнопки копирования
-import axios from 'axios'; // Убедитесь, что axios установлен
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { hashText } from '../../services/api'; // Импортируем функцию для хеширования
 
 const Hash = () => {
     const [inputText, setInputText] = useState('');
@@ -26,16 +26,11 @@ const Hash = () => {
 
     const handleHashing = async () => {
         try {
-            const response = await axios.post('http://your-api-url/hashing', {
-                algorithm: algorithm,
-                format: outputFormat,
-                input: inputText
-            });
-            setHashOutput(response.data.sum); // Получаем хеш из ответа
+            const hash = await hashText(algorithm, outputFormat, inputText);
+            setHashOutput(hash); // Устанавливаем полученный хеш
             setError(''); // Очищаем ошибку, если запрос успешен
             setIsCopied(false); // Сбрасываем статус копирования
         } catch (err) {
-            console.error(err);
             setError('Error generating hash.'); // Устанавливаем сообщение об ошибке
         }
     };
@@ -46,14 +41,13 @@ const Hash = () => {
         setError(''); // Сбрасываем ошибку
     };
 
-    // Функция для копирования хэша
     const handleCopyHash = () => {
         navigator.clipboard.writeText(hashOutput)
             .then(() => {
-                setIsCopied(true); // Обновляем статус на "скопировано"
+                setIsCopied(true);
             })
             .catch(() => {
-                setIsCopied(false); // Обновляем статус на "не удалось скопировать"
+                setIsCopied(false);
             });
     };
 
@@ -64,7 +58,6 @@ const Hash = () => {
             </Typography>
             <Divider sx={{ marginBottom: '20px' }} />
 
-            {/* Поле ввода для текста */}
             <TextField
                 label="Input Text"
                 variant="outlined"
@@ -74,7 +67,6 @@ const Hash = () => {
                 sx={{ marginBottom: '20px' }}
             />
 
-            {/* Выбор алгоритма и формата в одной строке */}
             <Grid2 container spacing={2} sx={{ marginBottom: '20px' }}>
                 <Grid2 item xs={12} md={6}>
                     <FormControl fullWidth>
@@ -97,7 +89,6 @@ const Hash = () => {
                 </Grid2>
             </Grid2>
 
-            {/* Кнопка для запуска хеширования */}
             <Button
                 variant="contained"
                 color="primary"
@@ -107,14 +98,12 @@ const Hash = () => {
                 Generate Hash
             </Button>
 
-            {/* Ошибка, если запрос не удался */}
             {error && (
                 <Typography variant="body1" color="error" sx={{ marginTop: '10px' }}>
                     {error}
                 </Typography>
             )}
 
-            {/* Вывод хеша, если он был сгенерирован */}
             {hashOutput && (
                 <Box sx={{ marginTop: '20px', position: 'relative' }}>
                     <Typography variant="h6">Generated hash:</Typography>
@@ -126,8 +115,8 @@ const Hash = () => {
                             borderRadius: '5px',
                             position: 'relative',
                             display: 'flex',
-                            alignItems: 'center', // Выравнивание текста и кнопки копирования по центру
-                            justifyContent: 'space-between', // Текст слева, кнопка справа
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
                             overflowWrap: 'break-word',
                             wordBreak: 'break-all',
                         }}
@@ -135,21 +124,20 @@ const Hash = () => {
                         <Typography
                             variant="body1"
                             sx={{
-                                flex: 1, // Текст занимает всё доступное место
+                                flex: 1,
                                 marginRight: '10px',
                             }}
                         >
                             {hashOutput}
                         </Typography>
 
-                        {/* Кнопка копирования */}
                         <IconButton
                             onClick={handleCopyHash}
                             sx={{
-                                color: isCopied ? 'green' : 'inherit', // Зеленый цвет, если хеш был скопирован
+                                color: isCopied ? 'green' : 'inherit',
                                 padding: '5px',
                                 '&:hover': {
-                                    color: 'blue', // Цвет при наведении
+                                    color: 'blue',
                                 },
                             }}
                         >
