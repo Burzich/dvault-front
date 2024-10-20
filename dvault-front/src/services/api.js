@@ -2,7 +2,8 @@ import axios from 'axios';
 
 // api.js
 
-const API_BASE_URL = 'http://your-api-url.com/v1'; // Замените на свой реальный URL
+// const API_BASE_URL = 'http://your-api-url.com/v1'; // Замените на свой реальный URL
+const API_BASE_URL = process.env.API_BASE_URL;
 
 // Получение списка секретов
 export const fetchSecrets = async () => {
