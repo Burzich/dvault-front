@@ -6,7 +6,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 const TokenForm = ({ onLogin }) => {
     const [token, setToken] = useState('');
     const [error, setError] = useState(null);
-    const [showToken, setShowToken] = useState(false);
+    const [showToken, setShowToken] = useState(true);
 
     const handleSubmit = (e) => {
         e.preventDefault();

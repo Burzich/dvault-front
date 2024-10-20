@@ -8,6 +8,7 @@ const API_BASE_URL = process.env.API_BASE_URL;
 // Получение списка секретов
 export const fetchSecrets = async () => {
     try {
+        console.log("ебать мой хуй api - ", API_BASE_URL)
         const response = await fetch(`${API_BASE_URL}/sys/mounts`, {
             method: 'GET',
             headers: {
