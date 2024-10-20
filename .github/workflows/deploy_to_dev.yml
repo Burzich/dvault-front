@@ -43,6 +43,7 @@ jobs:
           --name ${{ env.CONTAINER_NAME }}
           -p ${{ env.CONTAINER_PORT }}:80
           --network ${{ env.DOCKER_NETWORK }}
+          --env API_BASE_URL=${{ env.API_BASE_URL }}
           -d
           ${{ env.IMAGE_NAME }}:${{ env.TAG }}
 
