@@ -4,7 +4,7 @@ import LoginForm from './LoginForm';
 import TokenForm from './TokenForm';
 
 const Auth = ({ onLogin }) => {
-    const [authMethod, setAuthMethod] = useState('login');
+    const [authMethod, setAuthMethod] = useState('token');
 
     const handleLogin = (data) => {
         onLogin(data);
@@ -37,8 +37,8 @@ const Auth = ({ onLogin }) => {
                         sx={{
                           textAlign: 'left',
                           }}>
+						<MenuItem value="token">Token</MenuItem>
                         <MenuItem value="login">Username</MenuItem>
-                        <MenuItem value="token">Token</MenuItem>
                     </Select>
                     <Box sx={{
                       my: 2

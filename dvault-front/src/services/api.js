@@ -8,14 +8,22 @@ const API_BASE_URL = process.env.API_BASE_URL;
 // Получение списка секретов
 export const fetchSecrets = async () => {
     try {
-        const response = await fetch(`${API_BASE_URL}/secrets`, {
+        const response = await fetch(`${API_BASE_URL}/sys/mounts`, {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json'
+                'Accept': '*/*',
+                'X-Vault-Token': 'hvs.eLNSDATfuaG9xmJTBrqprFo3'
             }
         });
         const data = await response.json();
-        return data.secrets;
+
+        // Преобразуем объект в массив секретов с названием и описанием
+        const secretsArray = Object.keys(data.data).map(key => ({
+            title: key,
+            description: data.data[key].description
+        }));
+
+        return secretsArray;
     } catch (error) {
         console.error('Ошибка при получении списка секретов:', error);
         throw error;
@@ -25,7 +33,7 @@ export const fetchSecrets = async () => {
 // Создание нового секрета
 export const createSecret = async (newSecret) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/secrets`, {
+        const response = await fetch(`${API_BASE_URL}/mounts`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -53,7 +61,7 @@ export const apiLogin = async (username, password) => {
 
 // Пример запроса на сервер для проверки токена
 export const apiVerifyToken = async (token) => {
-  const response = await axios.post(`${API_BASE_URL}/verify-token`, {
+  const response = await axios.post(`${API_BASE_URL}/token`, {
     token,
   });
   return response.data;
@@ -62,7 +70,7 @@ export const apiVerifyToken = async (token) => {
 // Для хеша
 export const hashText = async (algorithm, format, inputText) => {
     try {
-        const response = await axios.post(`${API_BASE_URL}/hashing`, {
+        const response = await axios.post(`${API_BASE_URL}/hash`, {
             algorithm: algorithm,
             format: format,
             input: inputText
