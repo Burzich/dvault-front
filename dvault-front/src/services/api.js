@@ -12,7 +12,7 @@ export const fetchSecrets = async () => {
             method: 'GET',
             headers: {
                 'Accept': '*/*',
-                'X-Vault-Token': 'hvs.eLNSDATfuaG9xmJTBrqprFo3'
+                'X-Vault-Token': 'hvs.3s9h4r4EzSYMGsSLHZc0iW2t'
             }
         });
         const data = await response.json();
