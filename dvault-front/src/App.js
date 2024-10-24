@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate, Link } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button, Box, Drawer, List, ListItem, ListItemText, IconButton, Backdrop, Divider } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -8,6 +8,7 @@ import Auth from './components/Auth/Auth';
 import Dashboard from './components/Dashboard';
 import Secrets from './components/Secrets';
 import Hash from './components/Tools/Hash';
+import initializeVault from './services/api'
 
 function App() {
   	const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -27,6 +28,10 @@ function App() {
 	const toggleDrawer = (open) => {
 		setIsDrawerOpen(open);
 	};
+
+	useEffect(() => {
+		initializeVault();
+	}, [])
 
   	return (
     	<Router>

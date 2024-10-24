@@ -3,34 +3,38 @@ import axios from 'axios';
 // api.js
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-var ROOT_TOKEN = ''
+var ROOT_TOKEN = '';
 
 // serg
 const initializeVault = async () => {
-    try {
-        const initResponse = await axios.post('http://84.252.139.98:8080/v1/sys/init');
-        // status по /v1/sys/seal-status
-        const { root_token, keys } = initResponse.data;
-
-        ROOT_TOKEN = root_token;
-
-        const firstKey = keys[0];
-        const secondKey = keys[1];
-
-        console.log(`ROOT_TOKEN: ${ROOT_TOKEN}`);
-        console.log(`First Key: ${firstKey}`);
-        console.log(`Second Key: ${secondKey}`);
-
-        await axios.post('http://84.252.139.98:8080/v1/sys/unseal', { key: firstKey });
-        await axios.post('http://84.252.139.98:8080/v1/sys/unseal', { key: secondKey });
-
-        console.log('Vault успешно инициализирован и распечатан.');
-    } catch (error) {
-        console.error('Ошибка при инициализации Vault:', error);
+    if (ROOT_TOKEN) {
+        try {
+            const initResponse = await axios.post(`${API_BASE_URL}/sys/init`);
+            // status по /v1/sys/seal-status
+            const { root_token, keys } = initResponse.data;
+    
+            ROOT_TOKEN = root_token;
+    
+            const firstKey = keys[0];
+            const secondKey = keys[1];
+    
+            console.log(`ROOT_TOKEN: ${ROOT_TOKEN}`);
+            console.log(`First Key: ${firstKey}`);
+            console.log(`Second Key: ${secondKey}`);
+    
+            await axios.post(`${API_BASE_URL}/sys/unseal`, { key: firstKey });
+            await axios.post(`${API_BASE_URL}/sys/unseal`, { key: secondKey });
+    
+            console.log('Vault init success');
+        } catch (error) {
+            console.error('error init Vault:', error);
+        }
+    } else {
+        console.log('Vault was init');
     }
 };
 
-initializeVault();
+//initializeVault();
 
 // serg end
 
