@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Box, Typography, TextField, Button, Select, MenuItem, FormControl, InputLabel, Divider, Grid2, IconButton } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { hashText } from '../../services/api'; // Импортируем функцию для хеширования
+import { hashText, hashTextLocal } from '../../services/api'; // Импортируем функцию для хеширования
 
 const Hash = () => {
     const [inputText, setInputText] = useState('');
@@ -26,7 +26,8 @@ const Hash = () => {
 
     const handleHashing = async () => {
         try {
-            const hash = await hashText(algorithm, outputFormat, inputText);
+            //const hash = await hashText(algorithm, outputFormat, inputText);
+            const hash = await hashTextLocal(algorithm, outputFormat, inputText);
             setHashOutput(hash); // Устанавливаем полученный хеш
             setError(''); // Очищаем ошибку, если запрос успешен
             setIsCopied(false); // Сбрасываем статус копирования

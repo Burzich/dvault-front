@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, Button, TextField, Typography, IconButton, InputAdornment } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { apiVerifyToken } from '../../services/api';
 
 const TokenForm = ({ onLogin }) => {
     const [token, setToken] = useState('');
@@ -10,8 +11,8 @@ const TokenForm = ({ onLogin }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (token === '123') {
-            onLogin({ token: '123', user: 'tokenUser' });
+        if (apiVerifyToken(token)) {
+            onLogin({ token: token, user: 'tokenUser' });
         } else {
             setError('Invalid token');
         }

@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import CryptoJS from 'crypto-js';
 // api.js
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -30,7 +30,8 @@ export const initializeVault = async () => {
             await axios.post(`${API_BASE_URL}/sys/unseal`, { key: secondKey });
             
             console.log('Vault init success');
-        } catch (error) {
+        } 
+        catch (error) {
             if (error.response) {
                 // Сервер вернул ответ с ошибкой
                 if (error.response.status === 500) {
@@ -39,13 +40,16 @@ export const initializeVault = async () => {
                         console.log('Vault already initialized. Not first.');
                         IS_INIT = true;
                     }
-                } else {
+                } 
+                else {
                     console.error('Error from server:', error.response.data);
                 }
-            } else if (error.request) {
+            } 
+            else if (error.request) {
                 // Запрос был сделан, но ответа не было получено
                 console.error('No response received:', error.request);
-            } else {
+            } 
+            else {
                 // Другая ошибка
                 console.error('Error setting up request:', error.message);
             }
@@ -62,12 +66,11 @@ export const initializeVault = async () => {
 // Получение списка секретов
 export const fetchSecrets = async () => {
     try {
-        console.log("", `${API_BASE_URL}`)
         const response = await fetch(`${API_BASE_URL}/sys/mounts`, {
             method: 'GET',
             headers: {
                 'Accept': '*/*',
-                'X-Vault-Token': 'hvs.eLNSDATfuaG9xmJTBrqprFo3'
+                'X-Vault-Token': ROOT_TOKEN
             }
         });
         const data = await response.json();
@@ -79,7 +82,8 @@ export const fetchSecrets = async () => {
         }));
 
         return secretsArray;
-    } catch (error) {
+    } 
+    catch (error) {
         console.error('Ошибка при получении списка секретов:', error);
         throw error;
     }
@@ -88,10 +92,11 @@ export const fetchSecrets = async () => {
 // Создание нового секрета
 export const createSecret = async (newSecret) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/mounts`, {
+        const response = await fetch(`${API_BASE_URL}/sys/mounts`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Accept': '*/*',
+                'X-Vault-Token': ROOT_TOKEN
             },
             body: JSON.stringify(newSecret)
         });
@@ -99,7 +104,8 @@ export const createSecret = async (newSecret) => {
             throw new Error('Ошибка при создании секрета');
         }
         return await response.json();
-    } catch (error) {
+    } 
+    catch (error) {
         console.error('Ошибка при создании нового секрета:', error);
         throw error;
     }
@@ -116,10 +122,37 @@ export const apiLogin = async (username, password) => {
 
 // Пример запроса на сервер для проверки токена
 export const apiVerifyToken = async (token) => {
-  const response = await axios.post(`${API_BASE_URL}/token`, {
-    token,
-  });
-  return response.data;
+    try {
+        ROOT_TOKEN = token;
+        const response = await fetch(`${API_BASE_URL}/sys/mounts`, {
+            method: 'GET',
+            headers: {
+                'Accept': '*/*',
+                'X-Vault-Token': ROOT_TOKEN
+            }
+        });
+        return true;
+    }
+    catch (error) {
+        if (error.response) {
+            // Сервер вернул ответ с ошибкой
+            if (error.response.status === 401) {
+                console.error('Server error (403):');
+            } 
+            else {
+                console.error('Error from server:');
+            }
+        } 
+        else if (error.request) {
+            // Запрос был сделан, но ответа не было получено
+            console.error('No response received:');
+        } 
+        else {
+            // Другая ошибка
+            console.error('HZ');
+        }
+    }
+  
 };
 
 // Для хеша
@@ -134,5 +167,38 @@ export const hashText = async (algorithm, format, inputText) => {
     } catch (error) {
         console.error('Ошибка при хешировании:', error);
         throw new Error('Error generating hash.');
+    }
+};
+
+export const hashTextLocal = async (algorithm, format, inputText) => {
+    try {
+        let hash;
+        
+        // Локальные алгоритмы через crypto-js
+        switch (algorithm) {
+            case 'sha2-256':
+                hash = CryptoJS.SHA256(inputText);
+                break;
+            case 'sha2-512':
+                hash = CryptoJS.SHA512(inputText);
+                break;
+            case 'md5':
+                hash = CryptoJS.MD5(inputText);
+                break;
+            default:
+                throw new Error('Unsupported algorithm');
+        }
+
+        // Форматы вывода
+        if (format === 'hex') {
+            return hash.toString(CryptoJS.enc.Hex);
+        } else if (format === 'base64') {
+            return hash.toString(CryptoJS.enc.Base64);
+        } else {
+            throw new Error('Unsupported output format');
+        }
+    } catch (error) {
+        console.error('Ошибка в хешировании:', error);
+        throw new Error('Error generating hash L.');
     }
 };
