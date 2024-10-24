@@ -8,7 +8,7 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const initializeVault = async () => {
     try {
         const initResponse = await axios.post('http://84.252.139.98:8080/v1/sys/init');
-        status по /v1/sys/seal-status
+        // status по /v1/sys/seal-status
         const { root_token, keys } = initResponse.data;
 
         process.env.ROOT_TOKEN = root_token;
