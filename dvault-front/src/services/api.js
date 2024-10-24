@@ -4,11 +4,12 @@ import axios from 'axios';
 
 // const API_BASE_URL = 'http://your-api-url.com/v1'; // Замените на свой реальный URL
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-
+const check_env = process.env.CHECK_ENV;
 // Получение списка секретов
 export const fetchSecrets = async () => {
     try {
-        console.log("", `${API_BASE_URL}`)
+        console.log("test", `${API_BASE_URL}`)
+        console.log("test2 ", `${check_env}`)
         const response = await fetch(`${API_BASE_URL}/sys/mounts`, {
             method: 'GET',
             headers: {
