@@ -25,7 +25,7 @@ jobs:
         run: >
           docker build 
           -t ${{ env.IMAGE_NAME }}:${{ env.TAG }}
-          --build-arg REACT_APP_API_BASE_URL=${{ env.REACT_APP_API_BASE_URL }}
+          --build-arg BUILD_ARG=${{ env.REACT_APP_API_BASE_URL }}
           .
 
       - name: Stop previous

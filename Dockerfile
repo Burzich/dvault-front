@@ -2,8 +2,8 @@ FROM node:18-alpine AS build
 
 WORKDIR /app
 
-ARG REACT_APP_API_BASE_URL
-ENV REACT_APP_API_BASE_URL="${REACT_APP_API_BASE_URL}"
+ARG BUILD_ARG
+ENV REACT_APP_API_BASE_URL="${BUILD_ARG}"
 
 COPY dvault-front/package*.json ./
 RUN npm install
