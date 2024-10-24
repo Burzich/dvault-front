@@ -250,7 +250,7 @@ function App() {
         		>
         	  		<Typography 
 						variant="body2">
-        	    		© 2024 Burzich
+        	    		© 2024 Debichыы
         	  		</Typography>
         		</Box>
       		</div>

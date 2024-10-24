@@ -14,6 +14,7 @@ export const initializeVault = async () => {
             const initResponse = await axios.post(`${API_BASE_URL}/sys/init`);
             // status по /v1/sys/seal-status
             const data = initResponse.data;
+            console.log('data ', data)
             if (data.errors && data.errors.includes('already initialized')){
                 console.log('Vault already initialized. Not first.');
                 IS_INIT = true;
