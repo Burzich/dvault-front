@@ -8,7 +8,7 @@ export let IS_INIT = false;
 export let FIRST_INIT = false;
 
 // serg
-const initializeVault = async () => {
+export const initializeVault = async () => {
     if (!IS_INIT) {
         try {
             const initResponse = await axios.post(`${API_BASE_URL}/sys/init`);
