@@ -13,12 +13,12 @@ export const initializeVault = async () => {
         try {
             const initResponse = await axios.post(`${API_BASE_URL}/sys/init`);
             // status по /v1/sys/seal-status
-            const data = await initResponse.json();
+            const data = initResponse.data;
             if (data.errors && data.errors.includes('already initialized')){
                 console.log('Vault already initialized. Not first.');
                 IS_INIT = true;
             } else {
-                const { root_token, keys } = initResponse.data;
+                const { root_token, keys } = data;
     
                 ROOT_TOKEN = root_token;
                 IS_INIT = true;

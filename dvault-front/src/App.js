@@ -212,9 +212,7 @@ function App() {
         	  		<Route
         	    		path="/"
         	    		element={isAuthenticated ? (
-        	    	  		<div>
-        	    	    		
-        	    	  		</div>
+							<Navigate to="/dashboard" />
         	    		) : (
         	    	  		<Navigate to="/login" />
         	    		)}
