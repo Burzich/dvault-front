@@ -3,6 +3,7 @@ import axios from 'axios';
 // api.js
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+var ROOT_TOKEN = ''
 
 // serg
 const initializeVault = async () => {
@@ -11,12 +12,12 @@ const initializeVault = async () => {
         // status по /v1/sys/seal-status
         const { root_token, keys } = initResponse.data;
 
-        process.env.ROOT_TOKEN = root_token;
+        ROOT_TOKEN = root_token;
 
         const firstKey = keys[0];
         const secondKey = keys[1];
 
-        console.log(`ROOT_TOKEN: ${process.env.ROOT_TOKEN}`);
+        console.log(`ROOT_TOKEN: ${ROOT_TOKEN}`);
         console.log(`First Key: ${firstKey}`);
         console.log(`Second Key: ${secondKey}`);
 
