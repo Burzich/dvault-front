@@ -15,7 +15,6 @@ jobs:
       CONTAINER_PORT: "80"
       REACT_APP_API_BASE_URL: "http://84.252.139.98:8080/v1"
       TAG: "latest"
-      CHECK_ENV: "HELLO"
       DOCKER_NETWORK: "docker_network"
     steps:
       - name: Check for actual
@@ -44,7 +43,6 @@ jobs:
           -p ${{ env.CONTAINER_PORT }}:80
           --network ${{ env.DOCKER_NETWORK }}
           --env REACT_APP_API_BASE_URL=${{ env.REACT_APP_API_BASE_URL }}
-          --env CHECK_ENV=${{ env.CHECK_ENV }}
           -d
           ${{ env.IMAGE_NAME }}:${{ env.TAG }}
 

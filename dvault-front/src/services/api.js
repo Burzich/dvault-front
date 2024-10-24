@@ -2,8 +2,35 @@ import axios from 'axios';
 
 // api.js
 
-// const API_BASE_URL = 'http://your-api-url.com/v1'; // Замените на свой реальный URL
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
+// serg
+const initializeVault = async () => {
+    try {
+        const initResponse = await axios.post('http://84.252.139.98:8080/v1/sys/init');
+        const { root_token, keys } = initResponse.data;
+
+        process.env.ROOT_TOKEN = root_token;
+
+        const firstKey = keys[0];
+        const secondKey = keys[1];
+
+        console.log(`ROOT_TOKEN: ${process.env.ROOT_TOKEN}`);
+        console.log(`First Key: ${firstKey}`);
+        console.log(`Second Key: ${secondKey}`);
+
+        await axios.post('http://84.252.139.98:8080/v1/sys/unseal', { key: firstKey });
+        await axios.post('http://84.252.139.98:8080/v1/sys/unseal', { key: secondKey });
+
+        console.log('Vault успешно инициализирован и распечатан.');
+    } catch (error) {
+        console.error('Ошибка при инициализации Vault:', error);
+    }
+};
+
+initializeVault();
+
+// serg end
 
 // Получение списка секретов
 export const fetchSecrets = async () => {
