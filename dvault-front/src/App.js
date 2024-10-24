@@ -8,7 +8,7 @@ import Auth from './components/Auth/Auth';
 import Dashboard from './components/Dashboard';
 import Secrets from './components/Secrets';
 import Hash from './components/Tools/Hash';
-import initializeVault from './services/api'
+import { initializeVault, FIRST_INIT } from './services/api'
 
 function App() {
   	const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -31,6 +31,9 @@ function App() {
 
 	useEffect(() => {
 		initializeVault();
+		if (FIRST_INIT) {
+			setIsAuthenticated(true)
+		}
 	}, [])
 
   	return (
