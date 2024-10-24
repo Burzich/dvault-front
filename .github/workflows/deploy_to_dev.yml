@@ -13,7 +13,7 @@ jobs:
       CONTAINER_NAME: "dvault_front"
       IMAGE_NAME: "dvault_front"
       CONTAINER_PORT: "80"
-      REACT_APP_API_BASE_URL: "http://handle_vault:8080/v1"
+      REACT_APP_API_BASE_URL: "http://84.252.139.98:8080/v1"
       TAG: "latest"
       CHECK_ENV: "HELLO"
       DOCKER_NETWORK: "docker_network"
