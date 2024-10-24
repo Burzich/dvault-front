@@ -13,32 +13,42 @@ export const initializeVault = async () => {
         try {
             const initResponse = await axios.post(`${API_BASE_URL}/sys/init`);
             // status по /v1/sys/seal-status
-            const data = initResponse.data;
-            console.log('data ', data)
-            if (data.errors && data.errors.includes('already initialized')){
-                console.log('Vault already initialized. Not first.');
-                IS_INIT = true;
-            } else {
-                const { root_token, keys } = data;
-    
-                ROOT_TOKEN = root_token;
-                IS_INIT = true;
-                FIRST_INIT = true
-                
-                const firstKey = keys[0];
-                const secondKey = keys[1];
-                
-                console.log(`ROOT_TOKEN: ${ROOT_TOKEN}`);
-                console.log(`First Key: ${firstKey}`);
-                console.log(`Second Key: ${secondKey}`);
-                
-                await axios.post(`${API_BASE_URL}/sys/unseal`, { key: firstKey });
-                await axios.post(`${API_BASE_URL}/sys/unseal`, { key: secondKey });
-                
-                console.log('Vault init success');
-            }
+            const { root_token, keys } = initResponse.data;
+
+            ROOT_TOKEN = root_token;
+            IS_INIT = true;
+            FIRST_INIT = true
+            
+            const firstKey = keys[0];
+            const secondKey = keys[1];
+            
+            console.log(`ROOT_TOKEN: ${ROOT_TOKEN}`);
+            console.log(`First Key: ${firstKey}`);
+            console.log(`Second Key: ${secondKey}`);
+            
+            await axios.post(`${API_BASE_URL}/sys/unseal`, { key: firstKey });
+            await axios.post(`${API_BASE_URL}/sys/unseal`, { key: secondKey });
+            
+            console.log('Vault init success');
         } catch (error) {
-            console.error('error init Vault:', error);
+            if (error.response) {
+                // Сервер вернул ответ с ошибкой
+                if (error.response.status === 500) {
+                    console.error('Server error (500):', error.response.data);
+                    if (error.response.data.errors && error.response.data.errors.includes('already initialized')) {
+                        console.log('Vault already initialized. Not first.');
+                        IS_INIT = true;
+                    }
+                } else {
+                    console.error('Error from server:', error.response.data);
+                }
+            } else if (error.request) {
+                // Запрос был сделан, но ответа не было получено
+                console.error('No response received:', error.request);
+            } else {
+                // Другая ошибка
+                console.error('Error setting up request:', error.message);
+            }
         }
     } else {
         console.log('Vault was init');
